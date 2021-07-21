@@ -16,7 +16,7 @@ func main() {
 		winner = executeRound()
 	}
 
-	endGame()
+	endGame(winner)
 }
 
 func startGame() {
@@ -30,17 +30,32 @@ func executeRound() string {
 	interaction.ShowAvailableActions(isSpecialRound)
 	userChoice := interaction.GetPlayerChoice(isSpecialRound)
 
+	var playerAttackDmg int
+	var playerHealValue int
+	var monsterAttackDmg int
+
 	if userChoice == "ATTACK" {
-		actions.AttackMonster(false)
+		playerAttackDmg = actions.AttackMonster(false)
 	} else if userChoice == "HEAL" {
-		actions.HealPlayer()
+		playerHealValue = actions.HealPlayer()
 	} else {
-		actions.AttackMonster(isSpecialRound)
+		playerAttackDmg = actions.AttackMonster(isSpecialRound)
 	}
 
-	actions.AttackPlayer()
+	monsterAttackDmg = actions.AttackPlayer()
 
 	playerHp, monsterHp := actions.GetHPAmounts()
+
+	roundData := interaction.RoundData{
+		Action:           userChoice,
+		PlayerHP:         playerHp,
+		MonsterHP:        monsterHp,
+		PlayerAttackDmg:  playerAttackDmg,
+		PlayerHealValue:  playerHealValue,
+		MonsterAttackDmg: monsterAttackDmg,
+	}
+
+	interaction.PrintRoundStatistics(&roundData)
 
 	if playerHp <= 0 {
 		return "Monster"
@@ -51,4 +66,6 @@ func executeRound() string {
 	return ""
 }
 
-func endGame() {}
+func endGame(winner string) {
+	interaction.DeclareWinner(winner)
+}
