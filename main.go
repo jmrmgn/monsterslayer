@@ -1,6 +1,12 @@
 package main
 
-import "github.com/jmrmgn/monsterslayer/interaction"
+import (
+	"fmt"
+
+	"github.com/jmrmgn/monsterslayer/interaction"
+)
+
+var currentRound = 0
 
 func main() {
 	startGame()
@@ -19,6 +25,14 @@ func startGame() {
 }
 
 func executeRound() string {
+	currentRound++
+	isSpecialRound := currentRound%3 == 0
+
+	interaction.ShowAvailableActions(isSpecialRound)
+	userChoice := interaction.GetPlayerChoice(isSpecialRound)
+
+	fmt.Println(userChoice)
+
 	return ""
 }
 
