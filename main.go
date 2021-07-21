@@ -1,8 +1,7 @@
 package main
 
 import (
-	"fmt"
-
+	"github.com/jmrmgn/monsterslayer/actions"
 	"github.com/jmrmgn/monsterslayer/interaction"
 )
 
@@ -31,7 +30,23 @@ func executeRound() string {
 	interaction.ShowAvailableActions(isSpecialRound)
 	userChoice := interaction.GetPlayerChoice(isSpecialRound)
 
-	fmt.Println(userChoice)
+	if userChoice == "ATTACK" {
+		actions.AttackMonster(false)
+	} else if userChoice == "HEAL" {
+		actions.HealPlayer()
+	} else {
+		actions.AttackMonster(isSpecialRound)
+	}
+
+	actions.AttackPlayer()
+
+	playerHp, monsterHp := actions.GetHPAmounts()
+
+	if playerHp <= 0 {
+		return "Monster"
+	} else if monsterHp <= 0 {
+		return "Player"
+	}
 
 	return ""
 }
