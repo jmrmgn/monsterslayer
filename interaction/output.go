@@ -3,6 +3,7 @@ package interaction
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/common-nighthawk/go-figure"
 )
@@ -58,7 +59,17 @@ func DeclareWinner(winner string) {
 }
 
 func WriteLogFile(rounds *[]RoundData) {
-	file, err := os.Create("gamelog.txt")
+	exPath, err := os.Executable()
+
+	if err != nil {
+		fmt.Println("Writing log file failed. Exiting!")
+		return
+	}
+
+	exPath = filepath.Dir(exPath)
+
+	file, err := os.Create(exPath + "/gamelog.txt")
+	// file, err := os.Create("gamelog.txt") // For "go run"
 
 	if err != nil {
 		fmt.Println("Saving a log file failed. Exiting...")
